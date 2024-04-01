@@ -19,21 +19,7 @@ import pandas as pd
 
 performance_rotated_mnist = pd.DataFrame(index=["SI","EWC","Online EWC"], columns=["Loss - Task 0","Loss - Task 1","Loss - Task 2","Loss - Task 3","Loss - Task 4","Accuracy - Task 0","Accuracy - Task 1","Accuracy - Task 2","Accuracy - Task 3","Accuracy - Task 4","Accuracy", "Loss"])
 
-'''
-rotated_mnist = RotatedMNIST(
-    n_experiences=5,
-    rotations_list = [0,40,80,120,160]
-    #nb_tasks=10,
-)
 
-import random
-
-train_indices = []
-
-train_indices = random.sample(range(0,60000),600)
-
-print(train_indices)
-'''
 
 import random
 import torchvision.transforms as transforms
