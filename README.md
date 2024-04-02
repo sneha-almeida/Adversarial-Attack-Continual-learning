@@ -1,2 +1,6 @@
 # ContinuousPoisoning: Assessing the Claims and Security Aspects of Continual Learning
-In this work, we have reproduced the results in the paper titled "Targeted Data Poisoning Attacks Against Continual Learning Neural Networks" by implementing it. 
+Run the files in the following order:
+- DefenderEnvironment/continual_learning_defender_env_60000_samples.py
+- DefenderEnvironment/continual_learning_defender_env_2400_samples.py
+- DefenderEnvironment/continual_learning_defender_env_1200_samples.py
+
