@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """rotated_mnist_adv_attack_15_percent.ipynb
-
 """
-
 
 import torch
 import torchvision
@@ -141,11 +139,11 @@ test_mnist_rotated_160 = MNIST(
 test_mnist_rotated_160 = data_utils.Subset(test_mnist_rotated_160, test_indices)
 
 
-
 """# Adversarial Attack - SI
 
 ## Adversarial Attack Parameters Initlialization
 """
+
 
 
 # Adversarial Attack
@@ -170,7 +168,7 @@ from avalanche.training.supervised import SynapticIntelligence, EWC
 
 from torch.optim.adam import Adam
 model_domain_incre_si = SimpleMLP(num_classes=10, input_size=int(100352/128),  hidden_size=400, hidden_layers=2, drop_rate=0.15)
-#optimizer = SGD(model.parameters(), lr=0.0001, momentum=0.9) #adam optimizer
+
 optimizer = Adam(model_domain_incre_si.parameters(), lr=0.0001)
 criterion = CrossEntropyLoss()
 
@@ -221,14 +219,14 @@ def start_poisoning_trial(model, target_batches, poison_batches, epsilon, iterat
 
         # Resize the output probabilities to match the batch size of labels
         output_probabilities = output_probabilities.repeat(list_of_labels.size(0), 1)
-        #print(output_probabilities)
+        
         loss = criterion(output_probabilities, list_of_labels)  # Compute loss
 
         loss.backward()  # Compute gradients
 
         target_gradients = [param.grad for param in model.parameters() if param.grad is not None]
         counter = counter + 1
-    #print("gradients",target_gradients)
+    
 
     # Step 5-10: Iteratively update the poison samples
     for t in range(iterations):
@@ -236,22 +234,22 @@ def start_poisoning_trial(model, target_batches, poison_batches, epsilon, iterat
         # Step 6: Compute poison gradients Δpθ=∇θL(f(Xadvτ+n,θ),Yτ+n)
         cosine_similarity_accumulator = 0
         counter_poison = 0
-        #print(type(poison_batches))
+        
         for images, labels in poison_batches:
-            #print("counter_poison = ",counter_poison)
-            #X = torch.tensor(images, requires_grad=True)
+            
+            
             X = images.clone().detach().requires_grad_(True)
             # Convert labels to one-hot encoding
 
             list_of_labels = torch.eye(10)[labels].long()
-            #print(list_of_labels)
+            
             optimizer.zero_grad()  # Reset gradients
 
             output_probabilities = model(images)
 
             # Resize the output probabilities to match the batch size of labels
             output_probabilities = output_probabilities.repeat(list_of_labels.size(0), 1)
-            #print(output_probabilities)
+            
             #compute loss between 1) output of model for poisoned dataset 2) label for that actual data point without poisoning
             loss = criterion(output_probabilities, list_of_labels)  # Compute loss
 
@@ -259,7 +257,7 @@ def start_poisoning_trial(model, target_batches, poison_batches, epsilon, iterat
 
             poison_gradients = [param.grad for param in model.parameters() if param.grad is not None]
             counter_poison = counter_poison + 1
-    #print("gradients",gradients)
+    
 
         # Step 7: Compute cosine similarity H=⟨Δtθ,Δpθ⟩ / (∥Δtθ∥ ∥Δpθ∥)
             cosine_similarity = torch.dot(torch.cat([g.flatten() for g in target_gradients]),
@@ -293,6 +291,7 @@ from avalanche.benchmarks.utils.data_attribute import DataAttribute
 train_mnist_rotated_40_task1_poisoned,labels_train_mnist_rotated_40 = start_poisoning_trial(model_domain_incre_si, train_mnist_rotated_0, train_mnist_rotated_40, epsilon, T, 1.0, 10, step_size_si)
 
 
+
 train_mnist_rotated_40_poisoned_list = []
 
 for i in range(len(train_mnist_rotated_40_task1_poisoned)):
@@ -300,6 +299,7 @@ for i in range(len(train_mnist_rotated_40_task1_poisoned)):
   label = labels_train_mnist_rotated_40[i]
   tup = (data,label)
   train_mnist_rotated_40_poisoned_list.append(tup)
+
 
 """## Perform Adversarial Attack on 80 Degrees Data"""
 print("Perform Adversarial Attack on 80 Degrees Data -- SI")
@@ -313,6 +313,7 @@ for i in range(len(train_mnist_rotated_80_task1_poisoned)):
   tup = (data,label)
   train_mnist_rotated_80_poisoned_list.append(tup)
 
+
 """## Perform Adversarial Attack on 120 Degrees Data"""
 print("Perform Adversarial Attack on 120 Degrees Data -- SI")
 train_mnist_rotated_120_task1_poisoned,labels_train_mnist_rotated_120 = start_poisoning_trial(model_domain_incre_si, train_mnist_rotated_0, train_mnist_rotated_120, epsilon, T, 1.0, 10, step_size_si)
@@ -325,6 +326,7 @@ for i in range(len(train_mnist_rotated_120_task1_poisoned)):
   tup = (data,label)
   train_mnist_rotated_120_poisoned_list.append(tup)
 
+
 """## Perform Adversarial Attack on 160 Degrees Data"""
 print("Perform Adversarial Attack on 160 Degrees Data -- SI")
 train_mnist_rotated_160_task1_poisoned,labels_train_mnist_rotated_160 = start_poisoning_trial(model_domain_incre_si, train_mnist_rotated_0, train_mnist_rotated_160, epsilon, T, 1.0, 10, step_size_si)
@@ -336,7 +338,6 @@ for i in range(len(train_mnist_rotated_160_task1_poisoned)):
   label = labels_train_mnist_rotated_160[i]
   tup = (data,label)
   train_mnist_rotated_160_poisoned_list.append(tup)
-
 
 """## Processing data for Creation of scenario"""
 
@@ -429,17 +430,15 @@ scenario_custom_task_labels_rotated_mnist = dataset_benchmark(
 train_stream = scenario_custom_task_labels_rotated_mnist.train_stream
 test_stream = scenario_custom_task_labels_rotated_mnist.test_stream
 
-#print(type(train_stream))
-
-#print(train_stream)
 
 counter = 0
 # Iterate over the train_stream and print task labels
 for task_info in scenario_custom_task_labels_rotated_mnist.train_stream:
     task_label = task_info.task_label
-    
-    
+    #task_info.task_label = counter
+    #print("Task Label:", {task_label})
     counter += counter
+
 
 
 # we get the first experience
@@ -466,7 +465,6 @@ for i, data in enumerate(tqdm(dataset)):
   pass
 
 
-
 experience0 = train_stream[0]
 dataset_0 = experience0.dataset
 
@@ -488,8 +486,28 @@ dataset_4 = experience4.dataset
 ## Here we have to take samples from task 0, change their label and inject them into other tasks
 
 
-## Training Poisoned Model on SI
-### Training"""
+from torch.optim import SGD
+from torch.nn import CrossEntropyLoss
+from avalanche.models import SimpleMLP
+from avalanche.training.supervised import SynapticIntelligence, EWC  # and many more!
+
+from avalanche.training.supervised import SynapticIntelligence, EWC
+
+from torch.optim.adam import Adam
+model_domain_incre_si = SimpleMLP(num_classes=10, input_size=int(100352/128),  hidden_size=400, hidden_layers=2, drop_rate=0.15)
+
+optimizer = Adam(model_domain_incre_si.parameters(), lr=0.0001)
+criterion = CrossEntropyLoss()
+
+cl_strategy_si = SynapticIntelligence(
+    model_domain_incre_si, optimizer, criterion,
+    train_mb_size=128, train_epochs=10, eval_mb_size=128, si_lambda = 5
+)
+
+for param in model_domain_incre_si.parameters():
+    param.requires_grad = True
+
+"""### Training"""
 
 # TRAINING LOOP
 print('Starting experiment...')
@@ -593,7 +611,7 @@ from avalanche.training.supervised import SynapticIntelligence, EWC
 
 from torch.optim.adam import Adam
 model_domain_incre_ewc = SimpleMLP(num_classes=10, input_size=int(100352/128),  hidden_size=400, hidden_layers=2, drop_rate=0.15)
-#optimizer = SGD(model.parameters(), lr=0.0001, momentum=0.9) #adam optimizer
+
 optimizer = Adam(model_domain_incre_ewc.parameters(), lr=0.0001)
 criterion = CrossEntropyLoss()
 
@@ -664,7 +682,7 @@ def start_poisoning_trial(model, target_batches, poison_batches, epsilon, iterat
             # Convert labels to one-hot encoding
 
             list_of_labels = torch.eye(10)[labels].long()
-            
+            #print(list_of_labels)
             optimizer.zero_grad()  # Reset gradients
 
             output_probabilities = model(images)
@@ -762,8 +780,6 @@ for i in range(len(train_mnist_rotated_160_task1_poisoned)):
   train_mnist_rotated_160_poisoned_list.append(tup)
 
 
-
-
 """## Processing data for Creation of scenario"""
 
 task_labels_train = [1] * 1200
@@ -849,16 +865,13 @@ scenario_custom_task_labels_rotated_mnist = dataset_benchmark(
 train_stream = scenario_custom_task_labels_rotated_mnist.train_stream
 test_stream = scenario_custom_task_labels_rotated_mnist.test_stream
 
-#print(type(train_stream))
-
-#print(train_stream)
 
 counter = 0
 # Iterate over the train_stream and print task labels
 for task_info in scenario_custom_task_labels_rotated_mnist.train_stream:
     task_label = task_info.task_label
-    #task_info.task_label = counter
-    #print("Task Label:", {task_label})
+    
+    
     counter += counter
 
 
@@ -887,17 +900,21 @@ for i, data in enumerate(tqdm(dataset)):
   pass
 
 
+
 experience0 = train_stream[0]
 dataset_0 = experience0.dataset
 
 experience1 = train_stream[1]
 dataset_1 = experience1.dataset
 
+
 experience2 = train_stream[2]
 dataset_2 = experience2.dataset
 
+
 experience3 = train_stream[3]
 dataset_3 = experience3.dataset
+
 
 experience4 = train_stream[4]
 dataset_4 = experience4.dataset
@@ -905,8 +922,25 @@ dataset_4 = experience4.dataset
 ## Here we have to take samples from task 0, change their label and inject them into other tasks
 
 
-## Training Poisoned Model on EWC
-### Training
+from torch.optim import SGD
+from torch.nn import CrossEntropyLoss
+from avalanche.models import SimpleMLP
+from avalanche.training.supervised import SynapticIntelligence, EWC  # and many more!
+
+from avalanche.training.supervised import SynapticIntelligence, EWC
+
+from torch.optim.adam import Adam
+model_domain_incre_ewc = SimpleMLP(num_classes=10, input_size=int(100352/128),  hidden_size=400, hidden_layers=2, drop_rate=0.15)
+
+optimizer = Adam(model_domain_incre_ewc.parameters(), lr=0.0001)
+criterion = CrossEntropyLoss()
+
+cl_strategy_ewc = EWC(
+    model_domain_incre_ewc, optimizer, criterion,
+    train_mb_size=128, train_epochs=10, eval_mb_size=128, ewc_lambda = 5000
+)
+
+"""### Training"""
 
 # TRAINING LOOP
 print('Starting experiment...')
@@ -970,7 +1004,7 @@ for dict in results_rotated_mnist_ewc:
       performance_rotated_mnist.loc["EWC","Loss"] = value
   counter += 1
 print(performance_rotated_mnist)
-
+  
 
 """### Saving the poisoned model"""
 
@@ -1154,6 +1188,7 @@ from avalanche.benchmarks.utils.data_attribute import DataAttribute
 train_mnist_rotated_40_task1_poisoned,labels_train_mnist_rotated_40 = start_poisoning_trial(model_domain_incre_online_ewc, train_mnist_rotated_0, train_mnist_rotated_40, epsilon, T, 1.0, 10, step_size_online_ewc)
 
 
+
 train_mnist_rotated_40_poisoned_list = []
 
 for i in range(len(train_mnist_rotated_40_task1_poisoned)):
@@ -1161,6 +1196,7 @@ for i in range(len(train_mnist_rotated_40_task1_poisoned)):
   label = labels_train_mnist_rotated_40[i]
   tup = (data,label)
   train_mnist_rotated_40_poisoned_list.append(tup)
+
 
 """## Perform Adversarial Attack on 80 Degrees Data"""
 print("Perform Adversarial Attack on 80 Degrees Data -- Online EWC")
@@ -1186,6 +1222,7 @@ for i in range(len(train_mnist_rotated_120_task1_poisoned)):
   label = labels_train_mnist_rotated_120[i]
   tup = (data,label)
   train_mnist_rotated_120_poisoned_list.append(tup)
+print(len(train_mnist_rotated_120_poisoned_list))
 
 
 """## Perform Adversarial Attack on 160 Degrees Data"""
@@ -1199,9 +1236,6 @@ for i in range(len(train_mnist_rotated_160_task1_poisoned)):
   label = labels_train_mnist_rotated_160[i]
   tup = (data,label)
   train_mnist_rotated_160_poisoned_list.append(tup)
-
-
-
 
 """## Processing data for Creation of scenario"""
 
@@ -1288,16 +1322,14 @@ scenario_custom_task_labels_rotated_mnist = dataset_benchmark(
 train_stream = scenario_custom_task_labels_rotated_mnist.train_stream
 test_stream = scenario_custom_task_labels_rotated_mnist.test_stream
 
-#print(type(train_stream))
 
-#print(train_stream)
 
 counter = 0
 # Iterate over the train_stream and print task labels
 for task_info in scenario_custom_task_labels_rotated_mnist.train_stream:
     task_label = task_info.task_label
-    #task_info.task_label = counter
-    #print("Task Label:", {task_label})
+    
+    
     counter += counter
 
 
@@ -1311,7 +1343,7 @@ dataset = experience.dataset
 # but you can recover additional info
 experience.current_experience
 experience.classes_in_this_experience
-print(experience.classes_in_this_experience)
+
 experience.classes_seen_so_far
 experience.previous_classes
 experience.future_classes
@@ -1329,22 +1361,69 @@ for i, data in enumerate(tqdm(dataset)):
 experience0 = train_stream[0]
 dataset_0 = experience0.dataset
 
+
 experience1 = train_stream[1]
 dataset_1 = experience1.dataset
+
 
 experience2 = train_stream[2]
 dataset_2 = experience2.dataset
 
+
 experience3 = train_stream[3]
 dataset_3 = experience3.dataset
+
 
 experience4 = train_stream[4]
 dataset_4 = experience4.dataset
 
 ## Here we have to take samples from task 0, change their label and inject them into other tasks
 
-## Training Poisoned Model on Online EWC
-### Training"""
+
+from torch.optim import SGD
+from torch.nn import CrossEntropyLoss
+from avalanche.models import SimpleMLP
+from avalanche.training.supervised import SynapticIntelligence, EWC  # and many more!
+
+from avalanche.training.supervised import EWC
+
+class OnlineEWC(EWC):
+    def before_training_exp(self, strategy, **kwargs):
+        self.model.freeze()
+        self.estimated_importance = {}  # Dictionary to store parameter importance estimates
+        self.online_fisher = {}  # Dictionary to store online Fisher information estimates
+
+    def before_backward(self, strategy, **kwargs):
+        # Compute gradients for each parameter and update online Fisher information
+        gradients = self.model.grad()
+        for name, gradient in gradients.items():
+            self.online_fisher[name] += gradient ** 2  # Update online Fisher information
+
+    def after_training_epoch(self, strategy, **kwargs):
+        # Update parameter importance based on online Fisher information
+        for name, parameter in self.model.named_parameters():
+            self.estimated_importance[name] = self.online_fisher[name]  # Update parameter importance
+
+    def penalty(self, strategy, **kwargs):
+        # Compute penalty based on parameter importance
+        penalty = 0.0
+        for name, parameter in self.model.named_parameters():
+            importance = self.estimated_importance[name]
+            penalty += (parameter - self.initial_parameters[name]) ** 2 * importance
+        return penalty
+
+from torch.optim.adam import Adam
+model_domain_incre_online_ewc = SimpleMLP(num_classes=10, input_size=int(100352/128),  hidden_size=400, hidden_layers=2, drop_rate=0.15)
+
+optimizer = Adam(model_domain_incre_online_ewc.parameters(), lr=0.0001)
+criterion = CrossEntropyLoss()
+
+cl_strategy_online_ewc = OnlineEWC(
+    model_domain_incre_online_ewc, optimizer, criterion,
+    train_mb_size=128, train_epochs=10, eval_mb_size=128, ewc_lambda = 5000
+)
+
+"""### Training"""
 
 # TRAINING LOOP
 print('Starting experiment...')
