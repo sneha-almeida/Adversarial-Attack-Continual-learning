@@ -172,7 +172,7 @@ optimizer = Adam(model_domain_incre_si.parameters(), lr=0.0001)
 criterion = CrossEntropyLoss()
 
 # load the parameters into the model
-model_domain_incre_si.load_state_dict(torch.load("/mnt/hdd-toshiba/snehaalmeida/conda_envs/model_domain_incre_si_final.pth"))
+model_domain_incre_si.load_state_dict(torch.load("AttackerEnvironment/CleanModels/model_domain_incre_si_final.pth"))
 
 cl_strategy_si = SynapticIntelligence(
     model_domain_incre_si, optimizer, criterion,
@@ -617,7 +617,7 @@ optimizer = Adam(model_domain_incre_ewc.parameters(), lr=0.0001)
 criterion = CrossEntropyLoss()
 
 # load the parameters into the model
-model_domain_incre_ewc.load_state_dict(torch.load("/mnt/hdd-toshiba/snehaalmeida/conda_envs/model_domain_incre_ewc_final.pth"))
+model_domain_incre_ewc.load_state_dict(torch.load("/AttackerEnvironment/CleanModels/model_domain_incre_ewc_final.pth"))
 
 cl_strategy_ewc = EWC(
     model_domain_incre_ewc, optimizer, criterion,
@@ -1074,7 +1074,7 @@ optimizer = Adam(model_domain_incre_online_ewc.parameters(), lr=0.0001)
 criterion = CrossEntropyLoss()
 
 # load the parameters into the model
-model_domain_incre_online_ewc.load_state_dict(torch.load("/mnt/hdd-toshiba/snehaalmeida/conda_envs/model_domain_incre_online_ewc_final.pth"))
+model_domain_incre_online_ewc.load_state_dict(torch.load("AttackerEnvironment/CleanModels/model_domain_incre_online_ewc_final.pth"))
 
 cl_strategy_online_ewc = OnlineEWC(
     model_domain_incre_online_ewc, optimizer, criterion,
