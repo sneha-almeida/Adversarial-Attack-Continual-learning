@@ -13,7 +13,7 @@ Run the files in the following order:
 11. AttackerEnvironment/2400Samples/rotated_mnist_adv_attack_20_percent_2400_samples.py
 12. AttackerEnvironment/2400Samples/rotated_mnist_adv_attack_5_percent_2400_samples.py
 
-To execute all these Python files, use the command "python<space>filename.py". For example, python continual_learning_defender_env_60000_samples.py
+To execute all these Python files, use the command "python filename.py". For example, python continual_learning_defender_env_60000_samples.py
 
 Files numbered from 1 to 4 will generate 6 trained models and 2 CSV files each. The CSV files will summarize the performance of these models. 
 
