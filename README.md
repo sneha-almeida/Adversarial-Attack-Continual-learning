@@ -1,4 +1,7 @@
 # ContinuousPoisoning: Assessing the Claims and Security Aspects of Continual Learning
+
+In this work, we have reproduced the results in the paper titled "Targeted Data Poisoning Attacks Against Continual Learning Neural Networks" by implementing it. 
+
 Run the files in the following order:
 1. DefenderEnvironment/continual_learning_defender_env_60000_samples.py: 
    This Python file simulates a defender environment for continual learning with 60,0000 samples of each dataset. So we have 60,000 samples in the MNIST, KMNIST, and FashionMNIST datasets each. This file trains a model for SI, EWC, and Online EWC strategy each for both, the RotatedMNIST scenario and the MNIST Fellowship scenario.
